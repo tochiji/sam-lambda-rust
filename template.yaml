@@ -1,0 +1,40 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+
+Globals:
+  Function:
+    Timeout: 5
+    Architectures:
+      - arm64
+
+Resources:
+  MyFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: my-function-rust-test
+      Runtime: provided.al2 # al2でないとarm64で実行できない
+      Handler: bootstrap.handler
+      CodeUri: .
+      FunctionUrlConfig: # 関数URLはここで設定します
+        AuthType: NONE # 認証をかけません
+        Cors: # CORSの設定も可能です
+          AllowOrigins:
+            - "*"
+      Environment:
+        Variables:
+          RUST_LOG: info
+          RUST_BACKTRACE: 1
+          RUST_LOG_STYLE: never
+    Metadata:
+      BuildMethod: makefile
+
+Outputs:
+  Function:
+    Description: MyFunction arn
+    Value: !GetAtt MyFunction.Arn
+  FunctionUrl:
+    Description: MyFunction Public endpoint
+    Value: !GetAtt MyFunctionUrl.FunctionUrl
+  FunctionIamRole:
+    Description: MyFunction IAM Role
+    Value: !GetAtt MyFunctionRole.Arn
