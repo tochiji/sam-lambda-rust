@@ -1,0 +1,14 @@
+[package]
+name = "sam-lambda-rust"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "my-function"
+path = "src/main.rs"
+
+[dependencies]
+lambda_runtime = "0.5.1"
+tokio = "1.18.2"
+serde_json = "1.0.81"
+env_logger = "0.9.0"
